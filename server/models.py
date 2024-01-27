@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+import random
 
 db = SQLAlchemy()
 
@@ -42,6 +43,17 @@ def get_user_score(username):
         return user.score
     return None
 
-# Game logic remains the same
 def play_game(player_choice):
-    return
+    choices = ['rock', 'paper', 'scissors']
+    computer_choice = random.choice(choices)
+
+    if player_choice == computer_choice:
+        return 'draw'
+    elif (
+        (player_choice == 'rock' and computer_choice == 'scissors') or
+        (player_choice == 'paper' and computer_choice == 'rock') or
+        (player_choice == 'scissors' and computer_choice == 'paper')
+    ):
+        return 'win'
+    else:
+        return 'lose'
