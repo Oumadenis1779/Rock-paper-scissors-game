@@ -71,10 +71,13 @@ def delete_user(username):
 def update_user(username):
     user = User.query.filter_by(username=username).first()
     if user:
-        new_password = request.json.get('new_password', user.password)
-        user.password = new_password
-        db.session.commit()
-        return jsonify({"msg": f"Password for user {username} updated successfully"}), 200
+        new_password = request.json.get('new_password', None)
+        if new_password is not None:
+            user.set_password(new_password)
+            db.session.commit()
+            return jsonify({"msg": f"Password for user {username} updated successfully"}), 200
+        else:
+            return jsonify({"msg": "New password not provided"}), 400
     else:
         return jsonify({"msg": f"User {username} not found"}), 404
 
